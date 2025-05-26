@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UMAP vs t-SNE 3D Viewer</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+  <h2>UMAP vs t-SNE 3D Visualization</h2>
+  <div id="umap" style="width: 48%; height: 90vh; display: inline-block;"></div>
+  <div id="tsne" style="width: 48%; height: 90vh; display: inline-block;"></div>
+
+  <script>
+    function plotData(url, divId, title) {
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const trace = {
+            x: data.map(d => d.x),
+            y: data.map(d => d.y),
+            z: data.map(d => d.z),
+            text: data.map(d => d.label),
+            mode: 'markers',
+            type: 'scatter3d',
+            marker: { size: 3, color: data.map(d => d.label), colorscale: 'Viridis' }
+          };
+
+          Plotly.newPlot(divId, [trace], {
+            title: title,
+            margin: { t: 50 },
+            scene: { xaxis: {}, yaxis: {}, zaxis: {} }
+          });
+        });
+    }
+
+    plotData('umap_embedding.json', 'umap', 'UMAP');
+    plotData('tsne_embedding.json', 'tsne', 't-SNE');
+  </script>
+</body>
+</html>

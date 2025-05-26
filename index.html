@@ -2,175 +2,192 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>UMAP vs t-SNE 3D Visualization</title>
+  <title>ChEMBL: Plasmodium falciparum Dashboard</title>
 
-  <!-- 1) Bootstrap CSS for layout, cards & utilities -->
+  <!-- Bootstrap for responsive layout & cards -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet"
   />
 
-  <!-- 2) Plotly.js for the 3D scatter plots -->
+  <!-- Plotly.js -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <style>
+    /* 1) Use Arial everywhere */
     body {
       font-family: Arial, sans-serif;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
+      padding: 1rem;
+    }
+    /* 2) Make each 3D plot 60% of viewport height */
+    .plot-3d {
+      height: 60vh;
+      width: 100%;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <!-- Title + Settings button -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="h3 m-0">UMAP vs t-SNE 3D</h1>
-      <button
-        class="btn btn-outline-secondary"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#settings"
-        aria-controls="settings"
-      >
-        ⚙️ Settings
-      </button>
-    </div>
+  <!-- ================= SUMMARY ================= -->
+  <div class="container mb-5">
+    <h1 class="display-6 text-center mb-3">
+      ChEMBL: Plasmodium falciparum (ID: CHEMBL364)
+    </h1>
+    <p class="text-center text-muted mb-1">05/02/25</p>
+    <p>
+      Most current data on Malaria (Plasmodium falciparum) can be found at
+      <a href="https://www.ebi.ac.uk/chembl/explore/target/CHEMBL364" target="_blank">
+        ChEMBL364
+      </a>.
+    </p>
 
-    <!-- Grid: two cols on md+, one on sm -->
-    <div class="row gx-3 gy-4">
-      <!-- UMAP card -->
+    <h5>Bioactivity Scores include:</h5>
+    <ul>
+      <li>IC₅₀: 5.93% of available data → 57,490 hits</li>
+      <li>EC₅₀: 2.57% of available data → 24,948 hits</li>
+      <li>XC₅₀: 1.40% of available data → 13,551 hits</li>
+      <li>IC₉₀: 0.16% of available data → 1,558 hits</li>
+    </ul>
+    <p>
+      Final number of data-points after pre-processing: <strong>40,324</strong><br>
+      19,230 unique molecules and 287 unique strains
+    </p>
+
+    <h5>What is IC₅₀?</h5>
+    <p>
+      IC₅₀ is the concentration of a drug required to inhibit 50% of a target’s 
+      biological activity, measured in molarity (µM or nM). It’s derived from 
+      the midpoint of a sigmoidal dose-response curve.
+    </p>
+
+    <h5>Why IC₅₀ matters</h5>
+    <ul>
+      <li>Standard pharmacology metric—widely reported in ChEMBL</li>
+      <li>Allows cross-study comparability</li>
+      <li>More abundant than rarer endpoints (e.g. IC₉₀), giving you more data</li>
+      <li>Produces stable, consistent signals for training deep-learning models</li>
+    </ul>
+
+    <h5>Preprocessing breakdown:</h5>
+    <table class="table table-sm">
+      <thead>
+        <tr><th>Stage</th><th>Rows removed</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Strains</td><td>5,034</td></tr>
+        <tr><td>IC₅₀ Scores missing</td><td>10,449</td></tr>
+        <tr><td>Sexual Stage Specific</td><td>1,608</td></tr>
+        <tr><td>SMILES invalid</td><td>75</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- =============== PIE CHART ROW =============== -->
+  <div class="container mb-5">
+    <div class="card shadow-sm">
+      <div class="card-header bg-info text-white">
+        Associated Bioactivities
+      </div>
+      <div class="card-body">
+        <div id="pieChart" style="height:400px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== UMAP vs t-SNE 3D Row ======== -->
+  <div class="container">
+    <div class="row gy-4">
       <div class="col-12 col-md-6">
         <div class="card shadow-sm h-100">
           <div class="card-header bg-primary text-white">UMAP</div>
-          <div id="umap" class="card-body p-0" style="height:500px;"></div>
+          <div id="umap" class="card-body p-0 plot-3d"></div>
         </div>
       </div>
-
-      <!-- t-SNE card -->
       <div class="col-12 col-md-6">
         <div class="card shadow-sm h-100">
           <div class="card-header bg-success text-white">t-SNE</div>
-          <div id="tsne" class="card-body p-0" style="height:500px;"></div>
+          <div id="tsne" class="card-body p-0 plot-3d"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Offcanvas sidebar for controls -->
-  <div
-    class="offcanvas offcanvas-start"
-    tabindex="-1"
-    id="settings"
-    aria-labelledby="settingsLabel"
-  >
-    <div class="offcanvas-header">
-      <h5 id="settingsLabel">Controls</h5>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="offcanvas"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div class="offcanvas-body">
-      <div class="mb-3">
-        <label for="markerSize" class="form-label">Marker size:</label>
-        <input
-          type="range"
-          class="form-range"
-          id="markerSize"
-          min="1"
-          max="10"
-          value="4"
-        />
-      </div>
-      <!-- Add more controls here if you like -->
-    </div>
-  </div>
-
-  <!-- Bootstrap JS (includes Popper) for offcanvas -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-  ></script>
-
+  <!-- ============ SCRIPTS ============ -->
   <script>
-    // 1) Define your colors
-    const COLORS = {
-      High:     "#FDE725",
-      Moderate: "#7AD151",
-      Low:      "#22A884",
-    };
+    // --- PIE CHART DATA (hard-code or fetch from a JSON endpoint) ---
+    const pieLabels = [
+      'IC₅₀','EC₅₀','XC₅₀','IC₉₀','Other'
+    ];
+    const pieValues = [57490,24948,13551,1558, /* rest = total–sum */ 147592 - (57490+24948+13551+1558)];
 
-    // 2) Common layout & modebar config
-    const COMMON_LAYOUT = {
-      margin: { t: 40, b: 20, l: 0, r: 0 },
-      scene: { xaxis: {}, yaxis: {}, zaxis: {} },
-      legend: {
-        x: 0.02,
-        y: 0.98,
-        bgcolor: "rgba(255,255,255,0.8)",
-        bordercolor: "#ccc",
-        borderwidth: 1,
-      },
-      template: "plotly_white",
-    };
-    const COMMON_CONFIG = {
+    Plotly.newPlot('pieChart', [{
+      type: 'pie',
+      labels: pieLabels,
+      values: pieValues,
+      textinfo: 'label+percent',
+      insidetextorientation: 'radial'
+    }], {
+      margin: { t:0, b:0, l:0, r:0 },
+      template: 'plotly_white'
+    }, {
       responsive: true,
-      displayModeBar: true,
-      displaylogo: false,
-      modeBarButtonsToAdd: ["resetCameraDefault", "zoom3d", "pan3d"],
+      displayModeBar: false
+    });
+
+    // --- COMMON 3D CONFIG & LAYOUT ---
+    const COLORS = { High: '#FDE725', Moderate: '#7AD151', Low: '#22A884' };
+    const LAYOUT3D = {
+      margin: { t:40, b:20, l:0, r:0 },
+      scene: { xaxis:{}, yaxis:{}, zaxis:{} },
+      legend: {
+        x:0.02, y:0.98,
+        bgcolor:'rgba(255,255,255,0.8)',
+        bordercolor:'#ccc', borderwidth:1
+      },
+      template:'plotly_white'
+    };
+    const CONFIG3D = {
+      responsive: true,
+      displayModeBar: 'hover',   // only show on hover
+      modeBarButtonsToAdd: ['resetCameraDefault','zoom3d','pan3d'],
+      displaylogo: false
     };
 
-    // 3) Fetch & plot function (group by Potency_Bucket)
-    function plotData(url, divId) {
+    function plot3D(url, divId) {
       fetch(url)
-        .then((r) => r.json())
-        .then((data) => {
-          // Group records by bucket
+        .then(r => r.json())
+        .then(data => {
+          // group by potency bucket
           const groups = {};
-          data.forEach((pt) => {
-            const b = pt.Potency_Bucket || "Unknown";
-            (groups[b] = groups[b] || []).push(pt);
+          data.forEach(pt => {
+            const b = pt.Potency_Bucket || 'Unknown';
+            (groups[b] = groups[b]||[]).push(pt);
           });
 
-          // Build one trace per bucket
+          // one trace per bucket
           const traces = Object.entries(groups).map(([bucket, pts]) => ({
-            x: pts.map((p) => p.x),
-            y: pts.map((p) => p.y),
-            z: pts.map((p) => p.z),
-            text: pts.map((p) => `${bucket}: ${p.id || ""}`),
+            x: pts.map(p=>p.x),
+            y: pts.map(p=>p.y),
+            z: pts.map(p=>p.z),
             name: bucket,
-            mode: "markers",
-            type: "scatter3d",
+            mode: 'markers',
+            type: 'scatter3d',
             marker: {
-              size: +document.getElementById("markerSize").value,
-              color: COLORS[bucket] || "#888",
-              opacity: 0.7,
-            },
+              size: 3,
+              color: COLORS[bucket]||'#999',
+              opacity: 0.8
+            }
           }));
 
-          Plotly.newPlot(divId, traces, COMMON_LAYOUT, COMMON_CONFIG);
+          Plotly.newPlot(divId, traces, LAYOUT3D, CONFIG3D);
         })
-        .catch((err) => {
-          console.error(err);
-          document.getElementById(divId).innerHTML =
-            "<p class='text-danger p-3'>Failed to load data.</p>";
-        });
+        .catch(e => console.error(e));
     }
 
-    // 4) Initial plots
-    plotData("umap_embedding.json", "umap");
-    plotData("tsne_embedding.json", "tsne");
-
-    // 5) Marker‐size slider hookup
-    document
-      .getElementById("markerSize")
-      .addEventListener("input", (e) => {
-        const newSize = +e.target.value;
-        Plotly.restyle("umap", { "marker.size": newSize });
-        Plotly.restyle("tsne", { "marker.size": newSize });
-      });
+    // draw them
+    plot3D('umap_embedding.json','umap');
+    plot3D('tsne_embedding.json','tsne');
   </script>
 </body>
 </html>
+

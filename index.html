@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>ChEMBL: Plasmodium falciparum Dashboard</title>
 
-  <!-- Bootstrap for responsive layout & cards -->
+  <!-- Bootstrap for layout & cards -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet"
@@ -14,12 +14,12 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <style>
-    /* 1) Use Arial everywhere */
+    /* Arial everywhere */
     body {
       font-family: Arial, sans-serif;
       padding: 1rem;
     }
-    /* 2) Make each 3D plot 60% of viewport height */
+    /* Make 3D plots about 60% of viewport height */
     .plot-3d {
       height: 60vh;
       width: 100%;
@@ -28,14 +28,14 @@
 </head>
 
 <body>
-  <!-- ================= SUMMARY ================= -->
+  <!-- ========== SUMMARY ========== -->
   <div class="container mb-5">
     <h1 class="display-6 text-center mb-3">
       ChEMBL: Plasmodium falciparum (ID: CHEMBL364)
     </h1>
     <p class="text-center text-muted mb-1">05/02/25</p>
     <p>
-      Most current data on Malaria (Plasmodium falciparum) can be found at
+      Most current data on Malaria can be found at&nbsp;
       <a href="https://www.ebi.ac.uk/chembl/explore/target/CHEMBL364" target="_blank">
         ChEMBL364
       </a>.
@@ -43,29 +43,28 @@
 
     <h5>Bioactivity Scores include:</h5>
     <ul>
-      <li>IC₅₀: 5.93% of available data → 57,490 hits</li>
-      <li>EC₅₀: 2.57% of available data → 24,948 hits</li>
-      <li>XC₅₀: 1.40% of available data → 13,551 hits</li>
-      <li>IC₉₀: 0.16% of available data → 1,558 hits</li>
+      <li>IC₅₀: 57 490 hits (5.93%)</li>
+      <li>EC₅₀: 24 948 hits (2.57%)</li>
+      <li>XC₅₀: 13 551 hits (1.40%)</li>
+      <li>IC₉₀: 1 558 hits (0.16%)</li>
     </ul>
     <p>
-      Final number of data-points after pre-processing: <strong>40,324</strong><br>
-      19,230 unique molecules and 287 unique strains
+      Final number after pre‐processing: <strong>40 324</strong><br>
+      19 230 unique molecules · 287 unique strains
     </p>
 
     <h5>What is IC₅₀?</h5>
     <p>
-      IC₅₀ is the concentration of a drug required to inhibit 50% of a target’s 
-      biological activity, measured in molarity (µM or nM). It’s derived from 
-      the midpoint of a sigmoidal dose-response curve.
+      The IC₅₀ is the concentration of a compound needed to inhibit 50% of a target’s activity,
+      measured in molarity. It comes from the midpoint of a sigmoidal dose–response curve.
     </p>
 
     <h5>Why IC₅₀ matters</h5>
     <ul>
-      <li>Standard pharmacology metric—widely reported in ChEMBL</li>
-      <li>Allows cross-study comparability</li>
-      <li>More abundant than rarer endpoints (e.g. IC₉₀), giving you more data</li>
-      <li>Produces stable, consistent signals for training deep-learning models</li>
+      <li>Standard pharmacology metric, common in ChEMBL</li>
+      <li>Enables cross‐study comparability</li>
+      <li>More abundant and consistent than rarer endpoints (IC₉₀, EC₉₀)</li>
+      <li>Gives stable signals for machine‐learning models</li>
     </ul>
 
     <h5>Preprocessing breakdown:</h5>
@@ -74,27 +73,39 @@
         <tr><th>Stage</th><th>Rows removed</th></tr>
       </thead>
       <tbody>
-        <tr><td>Strains</td><td>5,034</td></tr>
-        <tr><td>IC₅₀ Scores missing</td><td>10,449</td></tr>
-        <tr><td>Sexual Stage Specific</td><td>1,608</td></tr>
-        <tr><td>SMILES invalid</td><td>75</td></tr>
+        <tr><td>Strains</td><td>5 034</td></tr>
+        <tr><td>Missing IC₅₀</td><td>10 449</td></tr>
+        <tr><td>Sexual Stage Specific</td><td>1 608</td></tr>
+        <tr><td>Invalid SMILES</td><td>75</td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- =============== PIE CHART ROW =============== -->
+  <!-- ========== BIOACTIVITY PIE CHART ========== -->
   <div class="container mb-5">
     <div class="card shadow-sm">
       <div class="card-header bg-info text-white">
-        Associated Bioactivities
+        Associated Bioactivities (n = 969 219)
       </div>
       <div class="card-body">
-        <div id="pieChart" style="height:400px;"></div>
+        <div id="bioPieChart" style="height:400px;"></div>
       </div>
     </div>
   </div>
 
-  <!-- ======== UMAP vs t-SNE 3D Row ======== -->
+  <!-- ========== PREPROCESSING PIE CHART ========== -->
+  <div class="container mb-5">
+    <div class="card shadow-sm">
+      <div class="card-header bg-warning text-dark">
+        IC₅₀ Hits vs. Deletions
+      </div>
+      <div class="card-body">
+        <div id="prepPieChart" style="height:400px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== UMAP vs t-SNE 3D ROW ======== -->
   <div class="container">
     <div class="row gy-4">
       <div class="col-12 col-md-6">
@@ -112,20 +123,35 @@
     </div>
   </div>
 
-  <!-- ============ SCRIPTS ============ -->
+  <!-- ========== SCRIPTS ========== -->
   <script>
-    // --- PIE CHART DATA (hard-code or fetch from a JSON endpoint) ---
-    const pieLabels = [
-      'IC₅₀','EC₅₀','XC₅₀','IC₉₀','Other'
+    // ——— BIOACTIVITY PIE ———
+    const bioLabels = [
+      'Potency','Inhibition','Z score','INHIBITION','Percent Effect',
+      'Activity','Ratio IC50','IC90','ED50','MIC','GI','Ratio',
+      'AbsAC35','Ratio EC50','Growth Inhibition','Relative activity',
+      'Log RA','Other'
     ];
-    const pieValues = [57490,24948,13551,1558, /* rest = total–sum */ 147592 - (57490+24948+13551+1558)];
+    const bioValues = [
+      302506, 201067, 147592, 133425, 74710,
+      3324, 2317, 1558, 1242, 775, 732, 630,
+      469, 412, 400, 283, 211, 1577
+    ];
+    // a 1:1 color array
+    const bioColors = [
+      '#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd',
+      '#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf',
+      '#aec7e8','#ffbb78','#98df8a','#ff9896','#c5b0d5',
+      '#c49c94','#f7b6d2','#c7c7c7'
+    ];
 
-    Plotly.newPlot('pieChart', [{
+    Plotly.newPlot('bioPieChart', [{
       type: 'pie',
-      labels: pieLabels,
-      values: pieValues,
+      labels: bioLabels,
+      values: bioValues,
       textinfo: 'label+percent',
-      insidetextorientation: 'radial'
+      insidetextorientation: 'radial',
+      marker: { colors: bioColors }
     }], {
       margin: { t:0, b:0, l:0, r:0 },
       template: 'plotly_white'
@@ -134,47 +160,78 @@
       displayModeBar: false
     });
 
-    // --- COMMON 3D CONFIG & LAYOUT ---
-    const COLORS = { High: '#FDE725', Moderate: '#7AD151', Low: '#22A884' };
+
+    // ——— PREPROCESSING PIE ———
+    const prepLabels = [
+      'IC₅₀ Hits','Deleted: Strains','Deleted: Missing IC₅₀',
+      'Deleted: Sexual Stage','Deleted: SMILES'
+    ];
+    const prepValues = [57490, 5034, 10449, 1608, 75];
+    const prepColors = [
+      '#636efa','#ffa15a','#00cc96','#ab63fa','#19d3f3'
+    ];
+
+    Plotly.newPlot('prepPieChart', [{
+      type: 'pie',
+      labels: prepLabels,
+      values: prepValues,
+      textinfo: 'label+percent',
+      marker: { colors: prepColors }
+    }], {
+      margin: { t:0, b:0, l:0, r:0 },
+      template: 'plotly_white'
+    }, {
+      responsive: true,
+      displayModeBar: false
+    });
+
+
+    // ——— UMAP/t-SNE 3D CONFIG ———
+    const COLORS = {
+      High:     '#FDE725',
+      Moderate: '#7AD151',
+      Low:      '#22A884'
+    };
     const LAYOUT3D = {
       margin: { t:40, b:20, l:0, r:0 },
       scene: { xaxis:{}, yaxis:{}, zaxis:{} },
       legend: {
-        x:0.02, y:0.98,
-        bgcolor:'rgba(255,255,255,0.8)',
-        bordercolor:'#ccc', borderwidth:1
+        x: 0.02, y: 0.98,
+        bgcolor: 'rgba(255,255,255,0.8)',
+        bordercolor: '#ccc',
+        borderwidth: 1
       },
-      template:'plotly_white'
+      template: 'plotly_white'
     };
     const CONFIG3D = {
       responsive: true,
-      displayModeBar: 'hover',   // only show on hover
-      modeBarButtonsToAdd: ['resetCameraDefault','zoom3d','pan3d'],
-      displaylogo: false
+      displayModeBar: true,           // always visible
+      displaylogo: false,
+      modeBarButtonsToAdd: [
+        'resetCameraDefault','zoom3d','pan3d'
+      ]
     };
 
     function plot3D(url, divId) {
       fetch(url)
         .then(r => r.json())
         .then(data => {
-          // group by potency bucket
           const groups = {};
           data.forEach(pt => {
             const b = pt.Potency_Bucket || 'Unknown';
             (groups[b] = groups[b]||[]).push(pt);
           });
 
-          // one trace per bucket
           const traces = Object.entries(groups).map(([bucket, pts]) => ({
-            x: pts.map(p=>p.x),
-            y: pts.map(p=>p.y),
-            z: pts.map(p=>p.z),
+            x:    pts.map(p => p.x),
+            y:    pts.map(p => p.y),
+            z:    pts.map(p => p.z),
             name: bucket,
             mode: 'markers',
             type: 'scatter3d',
             marker: {
-              size: 3,
-              color: COLORS[bucket]||'#999',
+              size:    4,
+              color:   COLORS[bucket] || '#888',
               opacity: 0.8
             }
           }));
@@ -184,10 +241,8 @@
         .catch(e => console.error(e));
     }
 
-    // draw them
     plot3D('umap_embedding.json','umap');
     plot3D('tsne_embedding.json','tsne');
   </script>
 </body>
 </html>
-

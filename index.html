@@ -134,7 +134,10 @@
     ];
     Plotly.newPlot('bioPieChart', [{
       type: 'pie', labels: bioLabels, values: bioValues,
-      marker: { colors: bioColors }, textinfo: 'label+percent', insidetextorientation:'radial', sort:false
+      marker: { colors: bioColors }, 
+      textinfo: 'label+percent', 
+      textposition:'inside',
+      sort:false
     }], {
       xaxis: { visible: false },
       yaxis: { visible: false },
@@ -152,7 +155,10 @@
     const prepColors = ['#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff'];
     Plotly.newPlot('prepPieChart', [{
       type:'pie', labels:prepLabels, values:prepValues,
-      marker:{colors:prepColors}, textinfo:'label+percent', sort:false
+      marker:{colors:prepColors},
+      textinfo:'label+percent',
+      textposition: 'inside',
+      sort:false
     }], {
       xaxis: { visible: false },
       yaxis: { visible: false },
@@ -165,7 +171,7 @@
     });
 
     // 3D settings
-    const COLORS = { High:'#d33c61', Moderate:'#fe7f9c', Low:'#f2d6db' };
+    const COLORS = { High:'#65323e', Moderate:'#d33c61', Low:'#fe7f9c' };
     const LAYOUT3D = {margin:{t:40,b:20,l:0,r:0}, scene:{xaxis:{},yaxis:{},zaxis:{}}, legend:{x:0.02,y:0.98,bgcolor:'rgba(255,255,255,0.8)',bordercolor:'#ccc',borderwidth:1}, template:'plotly_white'};
     const CONFIG3D = {responsive:true, displayModeBar:true, displaylogo:false, modeBarButtonsToAdd:['resetCameraDefault','zoom3d','pan3d']};
 

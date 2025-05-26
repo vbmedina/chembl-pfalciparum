@@ -158,13 +158,11 @@
     Plotly.newPlot('prepPieChart', [{
       type:'pie', labels:prepLabels, values:prepValues,
       marker:{colors:prepColors},
-      textinfo:'percent',
-      textfont:{size:12},
-      textposition:'inside',
+      textposition:'none',
       sort:false
     }], {
      showlegend:true, 
-     legend:{font:{size:10},x:1.02,y:0.5},
+     legend:{x:1.02,y:0.5},
      margin:{t:0,b:0,l:0,r:300},
      template: 'plotly_white'
     }, {

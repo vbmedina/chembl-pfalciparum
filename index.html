@@ -48,8 +48,8 @@
       </a>.
     </p>
     <p>
-      Final number of data-points after pre-processing: <strong>40 324</strong><br>
-      19 230 unique molecules · 287 unique strains
+      Final number of data-points after pre-processing: <strong>40,324</strong><br>
+      <strong>19,230</strong> unique molecules and <strong>287</strong> unique strains
     </p>
 
     <h5>What is IC₅₀?</h5>
@@ -78,25 +78,27 @@
 
     <h5>Data Preprocessing Results</h5>
     <p>
-      Initial Number of Data Points: <strong>57 490</strong><br>
-      Final Number of Molecule-Strain Pairings: <strong>40 324</strong>
+      Initial Number of Data Points: <strong>57,490</strong><br>
+      Final Number of Molecule-Strain Pairings: <strong>40,324</strong>
     </p>
   </div>
 
   <!-- ========= PIE CHARTS ========= -->
-  <div class="container mb-5">
-    <h2 class="h5 text-center mb-3">Associated Bioactivities (n = 969 219)</n    </h2>
+   <div class="container mb-5">
+  
+    <div style="width: 50%;">
+      <h2 class="h5 text-center mb-3">Associated Bioactivities (n = 969,219)<br>    </h2>
     <div id="bioPieChart" class="pie-container"></div>
   </div>
 
-  <div class="container mb-5">
-    <h2 class="h5 text-center mb-3">IC₅₀ Hits vs Deletions</n    </h2>
+  <div style="width: 50%;">
+    <h2 class="h5 text-center mb-3">IC₅₀ Hits vs Deletions<br>    </h2>
     <div id="prepPieChart" class="pie-container"></div>
-  </div>
+</div>
 
   <!-- ========= 3D PLOTS ========= -->
   <div class="container">
-    <h2 class="h5 text-center mb-4">UMAP vs t-SNE 3D (Potency Buckets)</n    </h2>
+    <h2 class="h5 text-center mb-4">UMAP vs t-SNE 3D (Potency Buckets)<br>    </h2>
     <div class="row gy-4">
       <div class="col-md-6">
         <div class="card shadow-sm">
@@ -134,10 +136,9 @@
     ];
     Plotly.newPlot('bioPieChart', [{
       type: 'pie', labels: bioLabels, values: bioValues,
-      marker: { colors: bioColors }, 
-      textinfo: 'label+percent', 
-      textposition:'inside',
-      sort:false
+      marker: { colors: bioColors },  
+      textposition: 'none',
+      sort: false
     }], {
       xaxis: { visible: false },
       yaxis: { visible: false },
@@ -156,8 +157,7 @@
     Plotly.newPlot('prepPieChart', [{
       type:'pie', labels:prepLabels, values:prepValues,
       marker:{colors:prepColors},
-      textinfo:'label+percent',
-      textposition: 'inside',
+      textposition: 'none',
       sort:false
     }], {
       xaxis: { visible: false },

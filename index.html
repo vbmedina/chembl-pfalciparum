@@ -17,7 +17,7 @@
     body {
       font-family: Arial, sans-serif;
       padding: 1rem;
-      background-color: #f8f9fa;
+      /* background-color: #f8f9fa; */
     }
     .plot-3d {
       width: 100%;
@@ -135,7 +135,16 @@
     Plotly.newPlot('bioPieChart', [{
       type: 'pie', labels: bioLabels, values: bioValues,
       marker: { colors: bioColors }, textinfo: 'label+percent', insidetextorientation:'radial', sort:false
-    }], { margin:{t:0,b:0,l:0,r:200}, legend:{x:1.02,y:0.5}, template:'plotly_white' }, {responsive:true, displayModeBar:false});
+    }], {
+      xaxis: { visible: false },
+      yaxis: { visible: false },
+      margin: { t:0, b:0, l:0, r:300 },
+      legend: { x:1.02, y:0.5 },
+      template: 'plotly_white'
+    }, {
+      responsive: true,
+      displayModeBar: false
+    });
 
     // Preprocessing pie
     const prepLabels = ['IC₅₀ Hits','Deleted: Strains','Deleted: Missing IC₅₀','Deleted: Sexual Stage','Deleted: SMILES'];
@@ -144,7 +153,16 @@
     Plotly.newPlot('prepPieChart', [{
       type:'pie', labels:prepLabels, values:prepValues,
       marker:{colors:prepColors}, textinfo:'label+percent', sort:false
-    }], {margin:{t:0,b:0,l:0,r:200}, legend:{x:1.02,y:0.5}, template:'plotly_white'}, {responsive:true, displayModeBar:false});
+    }], {
+      xaxis: { visible: false },
+      yaxis: { visible: false },
+      margin: { t:0, b:0, l:0, r:300 },
+      legend: { x:1.02, y:0.5 },
+      template: 'plotly_white'
+    }, {
+      responsive: true,
+      displayModeBar: false
+    });
 
     // 3D settings
     const COLORS = { High:'#d33c61', Moderate:'#fe7f9c', Low:'#f2d6db' };

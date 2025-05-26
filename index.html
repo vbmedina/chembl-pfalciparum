@@ -25,7 +25,7 @@
     }
     .pie-container {
       width: 100%;
-      height: 400px;
+      height: 300px;
     }
     .card-header-white {
       background-color: #ffffff !important;
@@ -86,7 +86,7 @@
   <!-- ========= PIE CHARTS ========= -->
   <div style="display: flex;">
     <div style="width: 50%;">
-      <h2 class="h5 mb-3 text-center" style="max-height: 15vh;">Associated Bioactivities (969,219 hits)<br></h2>
+      <h2 class="h5 mb-3 text-center">Associated Bioactivities (969,219 hits)<br></h2>
       <div id="bioPieChart" class="pie-container"></div>
     </div>
 
@@ -151,8 +151,8 @@
     });
 
     // Preprocessing pie
-    const prepLabels = ['IC₅₀ Hits','Deleted: Strains','Deleted: Missing IC₅₀','Deleted: Sexual Stage','Deleted: SMILES'];
-    const prepValues = [57490,5034,10449,1608,75];
+    const prepLabels = ['IC₅₀ Hits','Deleted: Missing Strains','Deleted: Missing IC₅₀','Delete: Standard Relation','Deleted: Sexual Stage','Deleted: Invalid SMILES'];
+    const prepValues = [57490,5034,6271,4178,1608,75];
     const prepColors = ['#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff'];
     Plotly.newPlot('prepPieChart', [{
       type:'pie', labels:prepLabels, values:prepValues,

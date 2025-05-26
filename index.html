@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>ChEMBL: Plasmodium falciparum Dashboard</title>
 
-  <!-- Bootstrap for layout & cards -->
+  <!-- Bootstrap CSS -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet"
@@ -14,108 +14,47 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <style>
-    /* Arial everywhere */
     body {
       font-family: Arial, sans-serif;
       padding: 1rem;
     }
-    /* Make 3D plots about 60% of viewport height */
     .plot-3d {
-      height: 60vh;
       width: 100%;
+      height: 60vh;
+    }
+    .pie-container {
+      width: 100%;
+      height: 400px;
     }
   </style>
 </head>
 
 <body>
-  <!-- ========== SUMMARY ========== -->
   <div class="container mb-5">
     <h1 class="display-6 text-center mb-3">
-      ChEMBL: Plasmodium falciparum (ID: CHEMBL364)
+      Associated Bioactivities (n = 969 219)
     </h1>
-    <p class="text-center text-muted mb-1">05/02/25</p>
-    <p>
-      Most current data on Malaria can be found at&nbsp;
-      <a href="https://www.ebi.ac.uk/chembl/explore/target/CHEMBL364" target="_blank">
-        ChEMBL364
-      </a>.
-    </p>
-
-    <h5>Bioactivity Scores include:</h5>
-    <ul>
-      <li>IC₅₀: 57 490 hits (5.93%)</li>
-      <li>EC₅₀: 24 948 hits (2.57%)</li>
-      <li>XC₅₀: 13 551 hits (1.40%)</li>
-      <li>IC₉₀: 1 558 hits (0.16%)</li>
-    </ul>
-    <p>
-      Final number after pre‐processing: <strong>40 324</strong><br>
-      19 230 unique molecules · 287 unique strains
-    </p>
-
-    <h5>What is IC₅₀?</h5>
-    <p>
-      The IC₅₀ is the concentration of a compound needed to inhibit 50% of a target’s activity,
-      measured in molarity. It comes from the midpoint of a sigmoidal dose–response curve.
-    </p>
-
-    <h5>Why IC₅₀ matters</h5>
-    <ul>
-      <li>Standard pharmacology metric, common in ChEMBL</li>
-      <li>Enables cross‐study comparability</li>
-      <li>More abundant and consistent than rarer endpoints (IC₉₀, EC₉₀)</li>
-      <li>Gives stable signals for machine‐learning models</li>
-    </ul>
-
-    <h5>Preprocessing breakdown:</h5>
-    <table class="table table-sm">
-      <thead>
-        <tr><th>Stage</th><th>Rows removed</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Strains</td><td>5 034</td></tr>
-        <tr><td>Missing IC₅₀</td><td>10 449</td></tr>
-        <tr><td>Sexual Stage Specific</td><td>1 608</td></tr>
-        <tr><td>Invalid SMILES</td><td>75</td></tr>
-      </tbody>
-    </table>
+    <div id="bioPieChart" class="pie-container"></div>
   </div>
 
-  <!-- ========== BIOACTIVITY PIE CHART ========== -->
   <div class="container mb-5">
-    <div class="card shadow-sm">
-      <div class="card-header bg-info text-white">
-        Associated Bioactivities (n = 969 219)
-      </div>
-      <div class="card-body">
-        <div id="bioPieChart" style="height:400px;"></div>
-      </div>
-    </div>
+    <h1 class="display-6 text-center mb-3">
+      IC₅₀ Hits vs Deletions
+    </h1>
+    <div id="prepPieChart" class="pie-container"></div>
   </div>
 
-  <!-- ========== PREPROCESSING PIE CHART ========== -->
-  <div class="container mb-5">
-    <div class="card shadow-sm">
-      <div class="card-header bg-warning text-dark">
-        IC₅₀ Hits vs. Deletions
-      </div>
-      <div class="card-body">
-        <div id="prepPieChart" style="height:400px;"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ======== UMAP vs t-SNE 3D ROW ======== -->
   <div class="container">
+    <h1 class="h4 mb-4 text-center">UMAP vs t-SNE 3D (Potency Buckets)</h1>
     <div class="row gy-4">
-      <div class="col-12 col-md-6">
-        <div class="card shadow-sm h-100">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
           <div class="card-header bg-primary text-white">UMAP</div>
           <div id="umap" class="card-body p-0 plot-3d"></div>
         </div>
       </div>
-      <div class="col-12 col-md-6">
-        <div class="card shadow-sm h-100">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
           <div class="card-header bg-success text-white">t-SNE</div>
           <div id="tsne" class="card-body p-0 plot-3d"></div>
         </div>
@@ -123,9 +62,8 @@
     </div>
   </div>
 
-  <!-- ========== SCRIPTS ========== -->
   <script>
-    // ——— BIOACTIVITY PIE ———
+    // ==== 1) BIOACTIVITY PIE ====
     const bioLabels = [
       'Potency','Inhibition','Z score','INHIBITION','Percent Effect',
       'Activity','Ratio IC50','IC90','ED50','MIC','GI','Ratio',
@@ -133,11 +71,10 @@
       'Log RA','Other'
     ];
     const bioValues = [
-      302506, 201067, 147592, 133425, 74710,
-      3324, 2317, 1558, 1242, 775, 732, 630,
-      469, 412, 400, 283, 211, 1577
+      302506,201067,147592,133425,74710,
+      3324,2317,1558,1242,775,732,630,
+      469,412,400,283,211,1577
     ];
-    // a 1:1 color array
     const bioColors = [
       '#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd',
       '#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf',
@@ -149,11 +86,15 @@
       type: 'pie',
       labels: bioLabels,
       values: bioValues,
+      marker: { colors: bioColors },
       textinfo: 'label+percent',
       insidetextorientation: 'radial',
-      marker: { colors: bioColors }
+      sort: false
     }], {
-      margin: { t:0, b:0, l:0, r:0 },
+      margin: { t:0, b:0, l:0, r:200 },      // extra right margin
+      legend: { x:1.02, y:0.5 },             // push legend outside
+      paper_bgcolor: 'white',
+      plot_bgcolor: 'white',
       template: 'plotly_white'
     }, {
       responsive: true,
@@ -161,12 +102,12 @@
     });
 
 
-    // ——— PREPROCESSING PIE ———
+    // ==== 2) PREPROCESSING PIE ====
     const prepLabels = [
-      'IC₅₀ Hits','Deleted: Strains','Deleted: Missing IC₅₀',
+      'IC₅₀ Hits', 'Deleted: Strains','Deleted: Missing IC₅₀',
       'Deleted: Sexual Stage','Deleted: SMILES'
     ];
-    const prepValues = [57490, 5034, 10449, 1608, 75];
+    const prepValues = [57490,5034,10449,1608,75];
     const prepColors = [
       '#636efa','#ffa15a','#00cc96','#ab63fa','#19d3f3'
     ];
@@ -175,10 +116,12 @@
       type: 'pie',
       labels: prepLabels,
       values: prepValues,
+      marker: { colors: prepColors },
       textinfo: 'label+percent',
-      marker: { colors: prepColors }
+      sort: false
     }], {
-      margin: { t:0, b:0, l:0, r:0 },
+      margin: { t:0, b:0, l:0, r:200 },
+      legend: { x:1.02, y:0.5 },
       template: 'plotly_white'
     }, {
       responsive: true,
@@ -186,7 +129,7 @@
     });
 
 
-    // ——— UMAP/t-SNE 3D CONFIG ———
+    // ==== 3) UMAP/t-SNE 3D SETTINGS ====
     const COLORS = {
       High:     '#FDE725',
       Moderate: '#7AD151',
@@ -196,16 +139,18 @@
       margin: { t:40, b:20, l:0, r:0 },
       scene: { xaxis:{}, yaxis:{}, zaxis:{} },
       legend: {
-        x: 0.02, y: 0.98,
-        bgcolor: 'rgba(255,255,255,0.8)',
-        bordercolor: '#ccc',
-        borderwidth: 1
+        x:0.02, y:0.98,
+        bgcolor:'rgba(255,255,255,0.8)',
+        bordercolor:'#ccc',
+        borderwidth:1
       },
-      template: 'plotly_white'
+      paper_bgcolor: 'white',
+      plot_bgcolor: 'white',
+      template:'plotly_white'
     };
     const CONFIG3D = {
       responsive: true,
-      displayModeBar: true,           // always visible
+      displayModeBar: true,      // always on
       displaylogo: false,
       modeBarButtonsToAdd: [
         'resetCameraDefault','zoom3d','pan3d'
@@ -213,34 +158,39 @@
     };
 
     function plot3D(url, divId) {
+      // purge any old plot
+      Plotly.purge(divId);
+
       fetch(url)
         .then(r => r.json())
         .then(data => {
+          // group by Potency_Bucket
           const groups = {};
           data.forEach(pt => {
-            const b = pt.Potency_Bucket || 'Unknown';
-            (groups[b] = groups[b]||[]).push(pt);
+            const b = pt.Potency_Bucket;  // must exactly match your JSON key
+            (groups[b] = groups[b] || []).push(pt);
           });
 
           const traces = Object.entries(groups).map(([bucket, pts]) => ({
-            x:    pts.map(p => p.x),
-            y:    pts.map(p => p.y),
-            z:    pts.map(p => p.z),
+            x:    pts.map(p=>p.x),
+            y:    pts.map(p=>p.y),
+            z:    pts.map(p=>p.z),
             name: bucket,
             mode: 'markers',
             type: 'scatter3d',
             marker: {
               size:    4,
-              color:   COLORS[bucket] || '#888',
+              color:   COLORS[bucket] || '#999',
               opacity: 0.8
             }
           }));
 
           Plotly.newPlot(divId, traces, LAYOUT3D, CONFIG3D);
         })
-        .catch(e => console.error(e));
+        .catch(err => console.error(`Error loading ${divId}:`, err));
     }
 
+    // draw both
     plot3D('umap_embedding.json','umap');
     plot3D('tsne_embedding.json','tsne');
   </script>

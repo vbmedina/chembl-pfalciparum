@@ -30,6 +30,58 @@
 </head>
 
 <body>
+  <!-- ========= SUMMARY ========= -->
+  <div class="container mb-5">
+    <h1 class="display-6 text-center mb-1">
+      ChEMBL: Plasmodium falciparum (ID: CHEMBL364)
+    </h1>
+    <p class="text-center text-muted mb-3">Downloaded on 05/02/25</p>
+    <p>
+      Most current data on Malaria (Plasmodium falciparum) can be found at
+      <a href="https://www.ebi.ac.uk/chembl/explore/target/CHEMBL364" target="_blank">
+        ChEMBL364
+      </a>.
+    </p>
+    <p>
+      Final number of data-points after pre-processing: <strong>40 324</strong><br>
+      19 230 unique molecules &nbsp;·&nbsp; 287 unique strains
+    </p>
+
+    <h5>What is IC₅₀?</h5>
+    <p>
+      The IC₅₀ score is the concentration of a drug required to inhibit 50% of a target’s 
+      biological activity, measured in molarity (µM or nM). It provides a quantitative 
+      measure of drug potency.
+    </p>
+
+    <h5>How is it measured?</h5>
+    <p>
+      Through dose–response experiments: a compound is applied at varying 
+      concentrations to a culture of the target, and the resulting growth or 
+      metabolic activity is quantified (e.g., via fluorescence). The IC₅₀ is 
+      the midpoint of the resulting sigmoidal curve.
+    </p>
+
+    <h5>Why is IC₅₀ important?</h5>
+    <ul>
+      <li>Standard pharmacology metric—widely used in ChEMBL</li>
+      <li>Enables cross-study comparability</li>
+      <li>More abundant than rarer endpoints (IC₉₀, EC₉₀), giving more data</li>
+      <li>Consistent reporting yields stable signals for ML models</li>
+      <li>Primary screening output in malaria drug-discovery pipelines</li>
+    </ul>
+
+    <h5>Data Preprocessing Results</h5>
+    <p>
+      Initial Number of Data Points: <strong>57 490</strong><br>
+      Final Number of Molecule-Strain Pairings: <strong>40 324</strong>
+    </p>
+  </div>
+  <!-- End of Summary -->
+
+
+  <!-- Bioactivity Pie -->
+<body>
   <div class="container mb-5">
     <h1 class="display-6 text-center mb-3">
       Associated Bioactivities (n = 969219)

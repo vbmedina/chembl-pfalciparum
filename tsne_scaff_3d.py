@@ -79,7 +79,7 @@ json_data = [
     for (x, y, z), potency in zip(embedding, df["Potency_Bucket"])
 ]
 
-json_path = Path("/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/tsne_embedding.json")
+json_path = Path("/Users/victoriamedina/Thesis_Project/chembl-pfalciparum/tsne_embedding.json")
 with open(json_path, "w") as f:
     json.dump(json_data, f)
 print(f"t-SNE 3D embedding exported to {json_path}")
@@ -93,14 +93,3 @@ for category, color in colors.items():
     plt.scatter(embedding[mask, 0], embedding[mask, 1],
                 c=color, label=category, alpha=0.6, s=10)
 
-plt.title("t-SNE of Morgan Fingerprints Colored by Potency")
-plt.xlabel("t-SNE-1")
-plt.ylabel("t-SNE-2")
-plt.legend(title="Potency")
-plt.grid(True)
-plt.tight_layout()
-
-# 9. Save and show
-output_path = Path("/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/scripts_viz/tsne_chemspace_scaff_viz.png")
-plt.savefig(output_path, dpi=300)
-print(f"Plot saved to {output_path}")

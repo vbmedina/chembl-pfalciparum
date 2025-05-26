@@ -82,7 +82,7 @@ json_data = [
     for (x, y, z), potency in zip(embedding, df["Potency_Bucket"])
 ]
 
-json_path = Path("/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/umap_embedding.json")
+json_path = Path("/Users/victoriamedina/Thesis_Project/chembl-pfalciparum/umap_embedding.json")
 with open(json_path, "w") as f:
     json.dump(json_data, f)
 print(f"UMAP 3D embedding exported to {json_path}")
@@ -95,15 +95,3 @@ for category, color in colors.items():
     mask = df["Potency_Bucket"] == category
     plt.scatter(embedding[mask, 0], embedding[mask, 1],
                 c=color, label=category, alpha=0.6, s=10)
-
-plt.title("UMAP of Morgan Fingerprints Colored by Potency")
-plt.xlabel("UMAP-1")
-plt.ylabel("UMAP-2")
-plt.legend(title="Potency")
-plt.grid(True)
-plt.tight_layout()
-
-# 9. Save and show plot
-output_path = Path("/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/umap_chemspace_scaff_viz.png")
-plt.savefig(output_path, dpi=300)
-print(f"Plot saved to {output_path}")

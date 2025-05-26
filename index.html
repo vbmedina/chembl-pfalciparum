@@ -32,7 +32,7 @@
 <body>
   <div class="container mb-5">
     <h1 class="display-6 text-center mb-3">
-      Associated Bioactivities (n = 969 219)
+      Associated Bioactivities (n = 969219)
     </h1>
     <div id="bioPieChart" class="pie-container"></div>
   </div>
@@ -66,20 +66,21 @@
     // ==== 1) BIOACTIVITY PIE ====
     const bioLabels = [
       'Potency','Inhibition','Z score','INHIBITION','Percent Effect',
-      'Activity','Ratio IC50','IC90','ED50','MIC','GI','Ratio',
+      'IC50','EC50', 'XC50', 'Activity', 'Ratio IC50', 'IC90','ED50','MIC','GI','Ratio',
       'AbsAC35','Ratio EC50','Growth Inhibition','Relative activity',
       'Log RA','Other'
     ];
     const bioValues = [
-      302506,201067,147592,133425,74710,
+      302506,201067,147592,133425,74710,57490,24948,13551,
       3324,2317,1558,1242,775,732,630,
       469,412,400,283,211,1577
     ];
     const bioColors = [
-      '#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd',
-      '#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf',
-      '#aec7e8','#ffbb78','#98df8a','#ff9896','#c5b0d5',
-      '#c49c94','#f7b6d2','#c7c7c7'
+      '#03355c','#1077c9','#4eb1ff','#94d0ff',
+      '#c0e3ff','#65323e','#d33c61','#fe7f9c','#fec1cb',
+      '#f2d6db','#0c343a','#015c5e','#0a979b','#74d8d5',
+      '#c4e6e5','#d3faf7','#a0221d','#ee4f4f',"#ff855a",
+      '#ffb89e','#ffd5c5'
     ];
 
     Plotly.newPlot('bioPieChart', [{
@@ -109,7 +110,7 @@
     ];
     const prepValues = [57490,5034,10449,1608,75];
     const prepColors = [
-      '#636efa','#ffa15a','#00cc96','#ab63fa','#19d3f3'
+      '#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff'
     ];
 
     Plotly.newPlot('prepPieChart', [{
@@ -131,9 +132,9 @@
 
     // ==== 3) UMAP/t-SNE 3D SETTINGS ====
     const COLORS = {
-      High:     '#FDE725',
-      Moderate: '#7AD151',
-      Low:      '#22A884'
+      High:     '#d33c61',
+      Moderate: '#fe7f9c',
+      Low:      '#f2d6db'
     };
     const LAYOUT3D = {
       margin: { t:40, b:20, l:0, r:0 },

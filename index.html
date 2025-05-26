@@ -1,39 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>UMAP vs t-SNE 3D Viewer</title>
+  <meta charset="UTF-8">
+  <title>UMAP vs t-SNE 3D Visualization</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    h1 { text-align: center; }
+    .plot-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .plot {
+      width: 48%;
+      height: 90vh;
+    }
+  </style>
 </head>
 <body>
-  <h2>UMAP vs t-SNE 3D Visualization</h2>
-  <div id="umap" style="width: 48%; height: 90vh; display: inline-block;"></div>
-  <div id="tsne" style="width: 48%; height: 90vh; display: inline-block;"></div>
+  <h1>UMAP vs t-SNE 3D Visualization</h1>
+  <div class="plot-container">
+    <div id="umap" class="plot"></div>
+    <div id="tsne" class="plot"></div>
+  </div>
 
   <script>
+    const COLORS = {
+      "High": "#FDE725",     // bright yellow-green
+      "Moderate": "#7AD151", // soft green
+      "Low": "#22A884"       // teal
+    };
+
     function plotData(url, divId, title) {
       fetch(url)
         .then(res => res.json())
         .then(data => {
-          const trace = {
-            x: data.map(d => d.x),
-            y: data.map(d => d.y),
-            z: data.map(d => d.z),
-            text: data.map(d => d.label),
+          const groups = {};
+
+          // Group by label
+          data.forEach(d => {
+            if (!groups[d.label]) groups[d.label] = [];
+            groups[d.label].push(d);
+          });
+
+          const traces = Object.entries(groups).map(([label, points]) => ({
+            x: points.map(p => p.x),
+            y: points.map(p => p.y),
+            z: points.map(p => p.z),
+            text: points.map(p => label),
+            name: label,
             mode: 'markers',
             type: 'scatter3d',
-            marker: { size: 3, color: data.map(d => d.label), colorscale: 'Viridis' }
-          };
+            marker: {
+              size: 3,
+              color: COLORS[label] || 'gray',
+              opacity: 0.75
+            }
+          }));
 
-          Plotly.newPlot(divId, [trace], {
+          Plotly.newPlot(divId, traces, {
             title: title,
             margin: { t: 50 },
             scene: { xaxis: {}, yaxis: {}, zaxis: {} }
           });
+        })
+        .catch(err => {
+          document.getElementById(divId).innerHTML = `<p style="color:red;">Failed to load ${url}</p>`;
+          console.error(err);
         });
     }
 
-    plotData('umap_embedding.json', 'umap', 'UMAP');
-    plotData('tsne_embedding.json', 'tsne', 't-SNE');
+    plotData("umap_embedding.json", "umap", "UMAP");
+    plotData("tsne_embedding.json", "tsne", "t-SNE");
   </script>
 </body>
 </html>

@@ -79,29 +79,35 @@
     <p class="text-center text-muted mb-3">
     </p>
   
-    <h5>What is IC₅₀?</h5>
-    <p>
-      The IC₅₀ score is the concentration of a drug required to inhibit 50% of a target’s 
-      biological activity, measured in molarity (µM or nM). It provides a quantitative 
-      measure of drug potency.
-    </p>
 
-    <h5>How is it measured?</h5>
-    <p>
-      Through dose–response experiments: a compound is applied at varying 
-      concentrations to a culture of the target, and the resulting growth or 
-      metabolic activity is quantified (e.g., via fluorescence). The IC₅₀ is 
-      the midpoint of the resulting sigmoidal curve.
-    </p>
+    <div class="container mb-5">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h5>What is IC₅₀?</h5>
+          <p>
+            The IC₅₀ score is the concentration of a drug required to inhibit 50% of a target’s 
+            biological activity, measured in molarity (µM or nM). It provides a quantitative 
+            measure of drug potency.
+          </p>
+          <h5>How is it measured?</h5>
+          <p>
+            Through dose–response experiments: a compound is applied at varying 
+            concentrations to a culture of the target, and the resulting growth or 
+            metabolic activity is quantified (e.g., via fluorescence). The IC₅₀ is 
+            the midpoint of the resulting sigmoidal curve.
+          </p>
+          <h5>Why is IC₅₀ important?</h5>
+          <ul>
+          <li>Standard pharmacology metric—widely used in ChEMBL</li>
+          <li>Enables cross-study comparability</li>
+          <li>More abundant than rarer endpoints (IC₉₀, EC₉₀), giving more data</li>
+          <li>Consistent reporting yields stable signals for ML models</li>
+          <li>Primary screening output in malaria drug-discovery pipelines</li>
+          </ul>
+        </div>
+      </div>
 
-    <h5>Why is IC₅₀ important?</h5>
-    <ul>
-      <li>Standard pharmacology metric—widely used in ChEMBL</li>
-      <li>Enables cross-study comparability</li>
-      <li>More abundant than rarer endpoints (IC₉₀, EC₉₀), giving more data</li>
-      <li>Consistent reporting yields stable signals for ML models</li>
-      <li>Primary screening output in malaria drug-discovery pipelines</li>
-    </ul>
+
 
     <h5 class="text-center">Data Preprocessing Results</h5>
     <p class="text-center">
@@ -199,24 +205,6 @@
       responsive: true,
       displayModeBar: false
     });
-    // const prepLabels = ['IC₅₀ Hits','Deleted: Missing Strains','Deleted: Missing IC₅₀','Delete: Standard Relation','Deleted: Sexual Stage','Deleted: Invalid SMILES'];
-    // const prepValues = [57490,5034,6271,4178,1608,75];
-    // const prepColors = ['#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff'];
-    // Plotly.newPlot('prepPieChart', [{
-    //   type:'pie', labels:prepLabels, values:prepValues,
-    //   marker:{colors:prepColors},
-    //   textposition: 'none',
-    //   sort:false
-    // }], {
-    //   xaxis: { visible: false },
-    //   yaxis: { visible: false },
-    //   margin: { t:0, b:0, l:0, r:300 },
-    //   legend: { x:1.02, y:0.5 },
-    //   template: 'plotly_white'
-    // }, {
-    //   responsive: true,
-    //   displayModeBar: false
-    // });
 
     // 3D settings
     const COLORS = { High:'#65323e', Moderate:'#d33c61', Low:'#fe7f9c' };

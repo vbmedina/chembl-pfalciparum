@@ -36,6 +36,24 @@
   </style>
 </head>
 <body>
+  <!-- Adding Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="#">Pf Chemical Space</a>
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#bioPieChart">Bioactivities</a></li>
+        <li class="nav-item"><a class="nav-link" href="#prepPieChart">Filtering</a></li>
+        <li class="nav-item"><a class="nav-link" href="#umap">Embeddings</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
   <!-- ========= SUMMARY ========= -->
   <div class="container mb-5">
     <h1 class="display-6 text-center mb-1">
@@ -207,5 +225,8 @@
     plot3D('umap_embedding.json','umap');
     plot3D('tsne_embedding.json','tsne');
   </script>
+  <footer class="text-center py-3 mt-5 border-top text-muted">
+    © 2025 Victoria Medina · <a href="https://github.com/vbmedina/chembl-pfalciparum">GitHub</a> · Data from ChEMBL 05/02/25
+  </footer>
 </body>
 </html>

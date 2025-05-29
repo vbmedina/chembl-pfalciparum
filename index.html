@@ -153,9 +153,9 @@
     });
 
     // Preprocessing pie
-    const prepLabels = ['IC₅₀ Hits','Deleted: Missing Strains','Deleted: Missing IC₅₀','Delete: Standard Relation','Deleted: Sexual Stage','Deleted: Invalid SMILES'];
-    const prepValues = [40324,5034,6271,4178,1608,75];
-    const prepColors = ['#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff'];
+    const prepLabels = ['IC₅₀ Hits','Deleted: Missing Strains','Deleted: Missing IC₅₀','Delete: Standard Relation','Deleted: Sexual Stage','Deleted: Invalid SMILES', 'Deleted: Invalid Scaffold'];
+    const prepValues = [57490,5034,6271,4178,1608,75,417];
+    const prepColors = ['#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff','#65323e'];
     Plotly.newPlot('prepPieChart', [{
       type:'pie', labels:prepLabels, values:prepValues,
       marker:{colors:prepColors},

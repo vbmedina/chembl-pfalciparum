@@ -76,10 +76,8 @@
       Plasmodium Falciparum Chemical Space
     </h1>
     <p class="text-center text-muted" style="margin-bottom: 0px;">Downloaded from ChEMBL on 05/02/25</p>
-    <p class="text-center text-muted mb-3">
-    </p>
+    <p class="text-center text-muted mb-3"></p>
   
-
     <div class="container mb-5">
       <div class="card shadow-sm mb-4">
         <div class="card-body">
@@ -107,28 +105,30 @@
         </div>
       </div>
 
+      <!-- ========= PIE CHARTS CONTAINER ========= -->
 
-
-    <h5 class="text-center">Data Preprocessing Results</h5>
-    <p class="text-center">
-      Initial Number of Data Points: <strong>57,490</strong><br>
-      Final Number of Molecule-Strain Pairings: <strong>40,324</strong>
-    </p>
-    </div>
-
-  <!-- ========= PIE CHARTS ========= -->
-  <div style="display: flex;">
-    <div style="width: 50%;">
-      <h2 class="h5 mb-3 text-center" style="margin-left: -110px;">Associated Bioactivities (969,219 hits)<br></h2>
-      <!-- <h2 class="h5 mb-3 text-center">Associated Bioactivities (969,219 hits)<br></h2> -->
-      <div id="bioPieChart" class="pie-container"></div>
-    </div>
-
-    <div style="width: 50%;">
-      <h2 class="h5 mb-3 text-center" style="margin-left: -210px;">IC₅₀ Hits vs Deletions<br></h2>
-      <div id="prepPieChart" class="pie-container"></div>
-    </div>
-  </div>
+      <div class="container mb-5">
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="text-center">Data Preprocessing Results</h5>
+            <p class="text-center">
+              Initial Number of Data Points: <strong>57,490</strong><br>
+              Final Number of Molecule-Strain Pairings: <strong>40,324</strong>
+            </p>
+            <div style="display: flex;">
+              <div style="width: 50%;">
+                <h2 class="h5 mb-3 text-center" style="margin-left: -110px;">Associated Bioactivities (969,219 hits)<br></h2>
+                <div id="bioPieChart" class="pie-container"></div>
+              </div>
+                <div style="width: 50%;">
+                  <h2 class="h5 mb-3 text-center" style="margin-left: -210px;">IC₅₀ Hits vs Deletions<br></h2>
+                  <div id="prepPieChart" class="pie-container"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
   <!-- ========= 3D PLOTS ========= -->
   <div class="container" style="padding-top:40px;">

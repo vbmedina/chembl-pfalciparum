@@ -122,7 +122,8 @@
     // Bioactivity pie
     const bioLabels = [
       'Potency','Inhibition','Z score','INHIBITION','Percent Effect',
-      'IC₅₀','EC₅₀','XC₅₀','Activity','Ratio IC₅₀','IC₉₀','ED₅₀','MIC','GI','Ratio',
+      'IC₅₀','EC₅₀','XC₅₀','Activity','Ratio IC₅₀',
+      'IC₉₀','ED₅₀','MIC','GI','Ratio',
       'AbsAC35','Ratio EC₅₀','Growth Inhibition','Relative activity','Log RA', 'Other'
     ];
     const bioValues = [
@@ -155,7 +156,7 @@
     // Preprocessing pie
     const prepLabels = ['IC₅₀ Hits','Deleted: Missing Strains','Deleted: Missing IC₅₀','Delete: Standard Relation','Deleted: Sexual Stage','Deleted: Invalid SMILES', 'Deleted: Invalid Scaffold'];
     const prepValues = [57490,5034,6271,4178,1608,75,417];
-    const prepColors = ['#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff','#65323e'];
+    const prepColors = ['#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff','#aec7e8','#c5b0d5'];
     Plotly.newPlot('prepPieChart', [{
       type:'pie', labels:prepLabels, values:prepValues,
       marker:{colors:prepColors},

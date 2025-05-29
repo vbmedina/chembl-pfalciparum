@@ -10,8 +10,10 @@ from rdkit.Chem.Scaffolds import MurckoScaffold
 from sklearn.preprocessing import StandardScaler
 import umap
 
+SEED = 42
+
 # 1. Load dataset
-DATA_PATH = "/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/chembl.csv"
+DATA_PATH = "/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/chembl_scaf.csv"
 df = pd.read_csv(DATA_PATH)
 print(f"Loaded {len(df):,} rows from {DATA_PATH}")
 
@@ -20,17 +22,17 @@ df = df.dropna(subset=["Smiles", "pChEMBL Value"]).reset_index(drop=True)
 print(f"{len(df):,} rows with valid SMILES and pChEMBL")
 
 # 3. Sample a subset for visualization (adjust n if needed)
-df = df.sample(n=40324)
+df = df.sample(n=39907)
 
 # 4. Convert SMILES to Morgan fingerprints and extract scaffolds
-def smiles_to_fp(smiles, radius=2, n_bits=2048):
-    mol = Chem.MolFromSmiles(smiles)
+def smiles_to_fp(Smiles, radius=2, n_bits=2048):
+    mol = Chem.MolFromSmiles(Smiles)
     if mol is None:
         return None
     return AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=n_bits)
 
-def extract_scaffold(smiles):
-    mol = Chem.MolFromSmiles(smiles)
+def extract_scaffold(Smiles):
+    mol = Chem.MolFromSmiles(Smiles)
     if mol is None:
         return None
     scaffold = MurckoScaffold.GetScaffoldForMol(mol)
@@ -66,9 +68,11 @@ df["Potency_Bucket"] = df["pChEMBL Value"].apply(bucket_pchembl)
 
 # 6. Run UMAP in 3D
 print("Running UMAP...")
-scaled_fps = StandardScaler().fit_transform(fps)
-reducer = umap.UMAP(n_components=3)
-embedding = reducer.fit_transform(scaled_fps)
+# scaled_fps = StandardScaler().fit_transform(fps)
+
+UMAP = umap.UMAP(n_components=3, n_neighbors=30, n_epochs=1000, init='random', random_state=SEED)
+
+embedding = UMAP.fit_transform(fps)
 print("UMAP completed.")
 
 # 7. Export to JSON
@@ -89,9 +93,20 @@ print(f"UMAP 3D embedding exported to {json_path}")
 
 # 8. Optional: Plot only first 2D components for static figure
 plt.figure(figsize=(10, 6))
-colors = {"High": "#FDE725FF", "Moderate": "#7AD151FF", "Low": "#22A884FF"}
-
+colors = {"High": "#65323e", "Moderate": "#d33c61", "Low": "#fe7f9c"}
 for category, color in colors.items():
     mask = df["Potency_Bucket"] == category
     plt.scatter(embedding[mask, 0], embedding[mask, 1],
                 c=color, label=category, alpha=0.6, s=10)
+
+plt.title("U-MAP of Morgan Fingerprints Colored by Potency")
+plt.xlabel("UMAP-1")
+plt.ylabel("UMAP-2")
+plt.legend(title="Potency")
+plt.grid(True)
+plt.tight_layout()
+
+# 8. Save and show
+output_path = Path("/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/umap_viz_scaff.png")
+plt.savefig(output_path, dpi=300)
+print(f"Plot saved to {output_path}")

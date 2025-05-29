@@ -8,8 +8,10 @@ from sklearn.manifold import TSNE
 from pathlib import Path
 import json
 
+SEED = 42
+
 # 1. Load dataset
-DATA_PATH = "/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/chembl.csv"
+DATA_PATH = "/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/chembl_scaf.csv"
 df = pd.read_csv(DATA_PATH)
 print(f"Loaded {len(df):,} rows from {DATA_PATH}")
 
@@ -18,7 +20,7 @@ df = df.dropna(subset=["Smiles", "pChEMBL Value"]).reset_index(drop=True)
 print(f"{len(df):,} rows with valid SMILES and pChEMBL")
 
 # 3. Sample subset for viz
-df = df.sample(n=40324)
+df = df.sample(n=39907)
 
 # 4. Convert SMILES to Morgan fingerprints
 def smiles_to_fp(Smiles, radius=2, n_bits=2048):
@@ -64,7 +66,7 @@ df["Potency_Bucket"] = df["pChEMBL Value"].apply(bucket_pchembl)
 
 # 6. Run t-SNE in 3D
 print("Running t-SNE...")
-tsne = TSNE(n_components=3, perplexity=30, n_iter=1000, init='random', random_state=42)
+tsne = TSNE(n_components=3, perplexity=30, n_iter=1000, init='random', random_state=SEED)
 embedding = tsne.fit_transform(fps)
 print("t-SNE completed.")
 
@@ -86,10 +88,21 @@ print(f"t-SNE 3D embedding exported to {json_path}")
 
 # 8. Optional: Plot only first 2D components for static figure
 plt.figure(figsize=(10, 6))
-colors = {"High": "#FDE725FF", "Moderate": "#7AD151FF", "Low": "#22A884FF"}
+colors = {"High": "#65323e", "Moderate": "#d33c61", "Low": "#fe7f9c"}
 
 for category, color in colors.items():
     mask = df["Potency_Bucket"] == category
     plt.scatter(embedding[mask, 0], embedding[mask, 1],
                 c=color, label=category, alpha=0.6, s=10)
 
+plt.title("t-SNE of Morgan Fingerprints Colored by Potency")
+plt.xlabel("t-SNE-1")
+plt.ylabel("t-SNE-2")
+plt.legend(title="Potency")
+plt.grid(True)
+plt.tight_layout()
+
+# 8. Save and show
+output_path = Path("/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/tsne_viz_scaff.png")
+plt.savefig(output_path, dpi=300)
+print(f"Plot saved to {output_path}")

@@ -1,40 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>ChEMBL: Plasmodium falciparum Dashboard</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Interactive dashboard of Plasmodium falciparum bioactivities from ChEMBL for antimalarial drug discovery.">
+    <meta name="author" content="Victoria Medina">
+    <title>ChEMBL: Plasmodium falciparum Dashboard</title>
+  
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  
+    <!-- Custom Styles -->
+    <style>
+      /* Use Roboto + light background */
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f7f9fc;
+        padding: 1rem;
+      }
+      /* White headers on cards & navbar */
+      .navbar,
+      .card-header-white {
+        background-color: #ffffff !important;
+      }
+      /* Define your accent colors */
+      :root {
+        --primary: #1077c9;
+        --secondary: #65323e;
+      }
+      h1,
+      h2,
+      h5 {
+        color: var(--primary);
+      }
+      .btn-primary {
+        background-color: var(--primary);
+        border-color: var(--primary);
+      }
+    </style>
+  </head>
 
-  <!-- Bootstrap CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-
-  <!-- Plotly.js -->
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 1rem;
-      /* background-color: #f8f9fa; */
-    }
-    .plot-3d {
-      width: 100%;
-      height: 60vh;
-    }
-    .pie-container {
-      width: 100%;
-      height: 500px;
-      /* height: 300px; */
-    }
-    .card-header-white {
-      background-color: #ffffff !important;
-      color: #343a40 !important;
-      border-bottom: 1px solid #dee2e6;
-    }
-  </style>
-</head>
 <body>
   <!-- Adding Navbar -->
 <nav class="navbar navbar-expand-lg shadow-sm mb-4" style="background-color: #2624d0;">

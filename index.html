@@ -6,42 +6,37 @@
     <meta name="description" content="Interactive dashboard of Plasmodium falciparum bioactivities from ChEMBL for antimalarial drug discovery.">
     <meta name="author" content="Victoria Medina">
     <title>ChEMBL: Plasmodium falciparum Dashboard</title>
-  
+
     <!-- Google Font -->
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-  
+
     <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-  
+
     <!-- Plotly.js -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  
+
     <!-- Custom Styles -->
     <style>
-      /* Use Roboto + light background */
       body {
         font-family: 'Roboto', sans-serif;
         background-color: #f7f9fc;
         padding: 1rem;
       }
-      /* White headers on cards */
-      .card-header-white {
-        background-color: #f7f9fc !important;
+      .card-header {
+        background-color: #ffffff;
       }
-      /* Define your accent colors */
       :root {
         --primary: #1077c9;
         --secondary: #65323e;
       }
-      h1,
-      h2,
-      h5 {
+      h1, h2, h5 {
         color: var(--primary);
       }
       .btn-primary {
@@ -51,9 +46,10 @@
     </style>
   </head>
 
-<body>
+  <body>
+
   <!-- Adding Navbar -->
-<nav class="navbar navbar-expand-lg shadow-sm mb-4" style="background-color: #0c318e;">
+  <nav class="navbar navbar-expand-lg shadow-sm mb-4" style="background-color: #0c318e;">
   <div class="container">
     <a class="navbar-brand text-white" href="#">Imperial College London</a>
     <button class="navbar-toggler" type="button"
@@ -68,7 +64,7 @@
       </ul>
     </div>
   </div>
-</nav>
+  </nav>
 
   <!-- ========= SUMMARY ========= -->
   <div class="container mb-5">
@@ -106,133 +102,143 @@
       </div>
     </div>
   </div>
-<!-- ========= PIE CHARTS CONTAINER ========= -->
-  <div class="container mb-5">
-    <div class="row gx-4">
-     <div class="col-12 col-md-6 mb-4">
-       <div class="card shadow-sm h-100">
-         <div class="card-header text-center bg-white">
-           <h5 class="mb-0">Associated Bioactivities (969,219 hits)</h5>
-         </div>
-         <div class="card-body p-3 d-flex justify-content-center">
-           <div id="bioPieChart" class="w-100" style="height:400px;"></div>
-         </div>
+
+    <!-- ========= PIE CHARTS CONTAINER ========= -->
+    <div class="container mb-5">
+      <!-- Data Preprocessing Summary (if needed above) -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-body text-center">
+          <h5>Data Preprocessing Results</h5>
+          <p>
+            Initial Number of Data Points: <strong>57,490</strong><br />
+            Final Number of Molecule-Strain Pairings: <strong>40,324</strong>
+          </p>
         </div>
       </div>
-      <div class="col-12 col-md-6 mb-4">
-        <div class="card shadow-sm h-100">
-          <div class="card-header text-center bg-white">
-           <h5 class="mb-0">Associated Assays</h5>
+
+      <div class="row gx-4">
+        <!-- Column 1: Associated Bioactivities -->
+        <div class="col-12 col-md-6 mb-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-header text-center">
+              <h5 class="mb-0">Associated Bioactivities (969,219 hits)</h5>
+            </div>
+            <div class="card-body p-3 d-flex justify-content-center">
+              <div id="bioPieChart" class="w-100" style="height:400px;"></div>
+            </div>
           </div>
-          <div class="card-body p-3 d-flex justify-content-center">
-            <div id="prepPieChart" class="w-100" style="height:400px;"></div>
+        </div>
+
+        <!-- Column 2: Associated Assays -->
+        <div class="col-12 col-md-6 mb-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-header text-center">
+              <h5 class="mb-0">Associated Assays</h5>
+            </div>
+            <div class="card-body p-3 d-flex justify-content-center">
+              <div id="prepPieChart" class="w-100" style="height:400px;"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-<!-- ========= 3D PLOTS ========= -->
-  <div class="container">
-    <h2 class="h5 text-center mb-4">UMAP vs t-SNE 3D (Potency Buckets)<br>    </h2>
-    <div class="row gy-4">
-      <div class="col-md-6">
-        <div class="card shadow-sm">
-          <div class="card-header card-header-white">UMAP</div>
-          <div id="umap" class="card-body p-0 plot-3d"></div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card shadow-sm">
-          <div class="card-header card-header-white">t-SNE</div>
-          <div id="tsne" class="card-body p-0 plot-3d"></div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- ========= SCRIPTS ========= -->
-  <script>
-    // Bioactivity pie
-    const bioLabels = [
-      'Potency','Inhibition','Z score','INHIBITION','Percent Effect',
-      'IC₅₀','EC₅₀','XC₅₀','Activity','Ratio IC₅₀',
-      'IC₉₀','ED₅₀','MIC','GI','Ratio',
-      'AbsAC35','Ratio EC₅₀','Growth Inhibition','Relative activity','Log RA', 'Other'
-    ];
-    const bioValues = [
-      302506,201067,147592,133425,74710,
-      57490,24948,13551,3324,2317,1558,1242,775,732,630,
-      469,412,400,283,211,1577
-    ];
-    const bioColors = [
-      '#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff',
-      '#65323e','#d33c61','#fe7f9c','#f2d6db','#e377c2',
-      '#7f7f7f','#bcbd22','#17becf','#aec7e8','#ffbb78',
-      '#98df8a','#ff9896','#c5b0d5','#c49c94','#ff855a','#ffd5c5'
-    ];
-    Plotly.newPlot('bioPieChart', [{
-      type: 'pie', labels: bioLabels, values: bioValues,
-      marker: { colors: bioColors },  
-      textposition: 'none',
-      sort: false
-    }], {
-      xaxis: { visible: false },
-      yaxis: { visible: false },
-      margin: { t:0, b:50, l:30, r:30 },
-      legend: { x:0.5, y:-0.3},
-      template: 'plotly_white',
-      paper_bgcolor: 'rgba(0,0,0,0)',
-      width: 600
-    }, {
-      responsive: true,
-      displayModeBar: false
-    });
 
-    // Preprocessing pie
-    const prepLabels = ['IC₅₀ Hits','Deleted: Missing Strains','Deleted: Missing IC₅₀','Delete: Standard Relation','Deleted: Sexual Stage','Deleted: Invalid SMILES', 'Deleted: Invalid Scaffold'];
-    const prepValues = [57490,5034,6271,4178,1608,75,417];
-    const prepColors = ['#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff','#aec7e8','#c5b0d5'];
-    Plotly.newPlot('prepPieChart', [{
-      type:'pie', labels:prepLabels, values:prepValues,
-      marker:{colors:prepColors},
-      textposition:'none',
-      sort:false
-    }], {
-      showlegend:true, 
-      legend:{x:1.02,y:0.5},
-      margin:{t:0,b:0,l:0,r:100},
-      template: 'plotly_white',
-      paper_bgcolor: 'rgba(0,0,0,0)',
-      width: 600
-      }, {
-     responsive: true,
-     displayModeBar: false
-      });
+    <!-- ========= 3D PLOTS ========= -->
+    <!-- (Your existing 3D UMAP / t-SNE rows go here) -->
 
-    // 3D settings
-    const COLORS = { High:'#65323e', Moderate:'#d33c61', Low:'#fe7f9c' };
-    const LAYOUT3D = {margin:{t:20,b:20,l:0,r:0}, scene:{xaxis:{},yaxis:{},zaxis:{}}, legend:{x:0.02,y:0.98,bgcolor:'rgba(255,255,255,0.8)',bordercolor:'#ccc',borderwidth:1}, template:'plotly_white'};
-    const CONFIG3D = {responsive:true, displayModeBar:true, displaylogo:false, modeBarButtonsToAdd:['resetCameraDefault','zoom3d','pan3d']};
+    <!-- ========= PLOTLY SCRIPT ========= -->
+    <script>
+      // ------------------------------------
+      // 1) Associated Bioactivities Pie
+      // ------------------------------------
+      const bioLabels = [
+        'Potency','Inhibition','Z score','INHIBITION','Percent Effect',
+        'IC₅₀','EC₅₀','XC₅₀','Activity','Ratio IC₅₀',
+        'IC₉₀','ED₅₀','MIC','GI','Ratio',
+        'AbsAC35','Ratio EC₅₀','Growth Inhibition','Relative activity','Log RA', 'Other'
+      ];
+      const bioValues = [
+        302506,201067,147592,133425,74710,
+        57490,24948,13551,3324,2317,1558,1242,775,732,630,
+        469,412,400,283,211,1577
+      ];
+      const bioColors = [
+        '#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff',
+        '#65323e','#d33c61','#fe7f9c','#f2d6db','#e377c2',
+        '#7f7f7f','#bcbd22','#17becf','#aec7e8','#ffbb78',
+        '#98df8a','#ff9896','#c5b0d5','#c49c94','#ff855a','#ffd5c5'
+      ];
+      Plotly.newPlot(
+        'bioPieChart',
+        [{
+          type: 'pie',
+          labels: bioLabels,
+          values: bioValues,
+          marker: { colors: bioColors },
+          textinfo: 'label+percent',
+          sort: false
+        }],
+        {
+          margin: { t: 20, b: 80, l: 20, r: 20 },
+          template: 'plotly_white',
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          legend: {
+            orientation: 'h',
+            x: 0.5, xanchor: 'center',
+            y: -0.15,
+            font: { size: 10 }
+          }
+        },
+        { responsive: true, displayModeBar: false }
+      );
 
-    function plot3D(url, divId) {
-      Plotly.purge(divId);
-      fetch(url)
-        .then(r=>r.json())
-        .then(data=>{
-          const groups = {};
-          data.forEach(pt => { const b = pt.label; (groups[b]=groups[b]||[]).push(pt); });
-          const traces = Object.entries(groups).map(([bucket, pts]) => ({
-            x:pts.map(p=>p.x), y:pts.map(p=>p.y), z:pts.map(p=>p.z), name:bucket, mode:'markers', type:'scatter3d', marker:{size:4, color:COLORS[bucket]||'#999', opacity:0.8}
-          }));
-          Plotly.newPlot(divId, traces, LAYOUT3D, CONFIG3D);
-        })
-        .catch(err=>console.error(`Error loading ${divId}:`,err));
-    }
-    plot3D('umap_embedding.json','umap');
-    plot3D('tsne_embedding.json','tsne');
-  </script>
-  <footer class="text-center py-3 mt-5 border-top text-muted">
-    © 2025 Victoria Medina · <a href="https://github.com/vbmedina/chembl-pfalciparum">GitHub</a> · Data from <a href="https://www.ebi.ac.uk/chembl/explore/target/CHEMBL364">ChEMBL</a> 05/02/25
-  </footer>
-</body>
+      // ------------------------------------
+      // 2) Associated Assays (IC₅₀ Hits) Pie
+      // ------------------------------------
+      const prepLabels = [
+        'IC₅₀ Hits',
+        'Deleted: Missing Strains',
+        'Deleted: Missing IC₅₀',
+        'Deleted: Standard Relation',
+        'Deleted: Sexual Stage',
+        'Deleted: Invalid SMILES',
+        'Deleted: Invalid Scaffold'
+      ];
+      const prepValues = [57490,5034,6271,4178,1608,75,417];
+      const prepColors = [
+        '#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff','#aec7e8','#c5b0d5'
+      ];
+      Plotly.newPlot(
+        'prepPieChart',
+        [{
+          type: 'pie',
+          labels: prepLabels,
+          values: prepValues,
+          marker: { colors: prepColors },
+          textinfo: 'label+percent',
+          sort: false
+        }],
+        {
+          margin: { t: 20, b: 80, l: 20, r: 20 },
+          template: 'plotly_white',
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          legend: {
+            orientation: 'h',
+            x: 0.5, xanchor: 'center',
+            y: -0.15,
+            font: { size: 10 }
+          }
+        },
+        { responsive: true, displayModeBar: false }
+      );
+    </script>
+
+    <footer class="text-center py-3 mt-5 border-top text-muted">
+      © 2025 Victoria Medina ·
+      <a href="https://github.com/vbmedina/chembl-pfalciparum">GitHub</a> ·
+      Data from <a href="https://www.ebi.ac.uk/chembl/explore/target/CHEMBL364">ChEMBL</a>
+      05/02/25
+    </footer>
+  </body>
 </html>

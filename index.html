@@ -210,28 +210,11 @@
         1558, 1242, 775, 732, 630, 
         469, 412, 400, 283, 211, 1577];
       const bioColors = [
-        '#03355c',
-        '#1077c9',
-        '#4eb1ff',
-        '#94d0ff',
-        '#c0e3ff',
-        '#65323e',
-        '#d33c61',
-        '#fe7f9c',
-        '#f2d6db',
-        '#e377c2',
-        '#7f7f7f',
-        '#bcbd22',
-        '#17becf',
-        '#aec7e8',
-        '#ffbb78',
-        '#98df8a',
-        '#ff9896',
-        '#c5b0d5',
-        '#c49c94',
-        '#ff855a',
-        '#ffd5c5',
-      ];
+        '#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff',
+        '#65323e','#d33c61','#fe7f9c','#f2d6db','#e377c2',
+        '#7f7f7f','#bcbd22','#17becf','#aec7e8','#ffbb78',
+        '#98df8a','#ff9896','#c5b0d5','#c49c94','#ff855a','#ffd5c5'];
+
       Plotly.newPlot(
         'bioPieChart',
         [
@@ -273,15 +256,8 @@
         'Deleted: Invalid Scaffold',
       ];
       const prepValues = [57490, 5034, 6271, 4178, 1608, 75, 417];
-      const prepColors = [
-        '#03355c',
-        '#1077c9',
-        '#4eb1ff',
-        '#94d0ff',
-        '#c0e3ff',
-        '#aec7e8',
-        '#c5b0d5',
-      ];
+      const prepColors = ['#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff','#aec7e8','#c5b0d5'];
+
       Plotly.newPlot(
         'prepPieChart',
         [
@@ -290,7 +266,6 @@
             labels: prepLabels,
             values: prepValues,
             marker: { colors: prepColors },
-            // textinfo: 'label+percent',
             sort: false,
           },
         ],

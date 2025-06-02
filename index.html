@@ -218,14 +218,8 @@
       Plotly.newPlot(
         'bioPieChart',
         [
-          {
-            type: 'pie',
-            labels: bioLabels,
-            values: bioValues,
-            marker: { colors: bioColors },
-            // textinfo: 'label+percent',
-            sort: false,
-          },
+          {type: 'pie',labels: bioLabels,values: bioValues,
+          marker: { colors: bioColors },textinfo: 'none',sort: false}
         ],
         {
           margin: { t: 20, b: 80, l: 20, r: 20 },
@@ -261,13 +255,8 @@
       Plotly.newPlot(
         'prepPieChart',
         [
-          {
-            type: 'pie',
-            labels: prepLabels,
-            values: prepValues,
-            marker: { colors: prepColors },
-            sort: false,
-          },
+          {type: 'pie',labels: prepLabels,values: prepValues,
+          marker: { colors: prepColors },textinfo: 'none',sort: false}
         ],
         {
           margin: { t: 20, b: 80, l: 20, r: 20 },

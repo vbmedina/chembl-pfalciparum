@@ -104,47 +104,34 @@
           </ul>
         </div>
       </div>
-
-      <!-- ========= PIE CHARTS CONTAINER ========= -->
-      <div class="container mb-5">
-        <!-- Data Preprocessing Summary -->
-        <div class="card shadow-sm mb-4">
-          <div class="card-body text-center">
-            <h5>Data Preprocessing Results</h5>
-            <p>
-              Initial Number of Data Points: <strong>57,490</strong><br />
-              Final Number of Molecule-Strain Pairings: <strong>40,324</strong>
-            </p>
-          </div>
+    </div>
+  </div>
+<!-- ========= PIE CHARTS CONTAINER ========= -->
+  <div class="container mb-5">
+    <div class="row gx-4">
+     <div class="col-12 col-md-6 mb-4">
+       <div class="card shadow-sm h-100">
+         <div class="card-header text-center bg-white">
+           <h5 class="mb-0">Associated Bioactivities (969,219 hits)</h5>
+         </div>
+         <div class="card-body p-3 d-flex justify-content-center">
+           <div id="bioPieChart" class="w-100" style="height:400px;"></div>
+         </div>
         </div>
-      
-        <div class="row gx-4">
-          <!-- Column 1: Associated Bioactivities -->
-          <div class="col-12 col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-              <div class="card-header card-header-white text-center">
-                <h5 class="mb-0">Associated Bioactivities (969,219 hits)</h5>
-              </div>
-              <div class="card-body p-3 d-flex flex-column align-items-center">
-                <div id="bioPieChart" class="pie-container flex-grow-1"></div>
-              </div>
-            </div>
+      </div>
+      <div class="col-12 col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header text-center bg-white">
+           <h5 class="mb-0">Associated Assays</h5>
           </div>
-      
-          <!-- Column 2: IC₅₀ Hits vs Deletions -->
-          <div class="col-12 col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-              <div class="card-header card-header-white text-center">
-                <h5 class="mb-0">IC₅₀ Hits vs Deletions</h5>
-              </div>
-              <div class="card-body p-3 d-flex flex-column align-items-center">
-                <div id="prepPieChart" class="pie-container flex-grow-1"></div>
-              </div>
-            </div>
+          <div class="card-body p-3 d-flex justify-content-center">
+            <div id="prepPieChart" class="w-100" style="height:400px;"></div>
           </div>
         </div>
       </div>
-  <!-- ========= 3D PLOTS ========= -->
+    </div>
+  </div>
+<!-- ========= 3D PLOTS ========= -->
   <div class="container">
     <h2 class="h5 text-center mb-4">UMAP vs t-SNE 3D (Potency Buckets)<br>    </h2>
     <div class="row gy-4">

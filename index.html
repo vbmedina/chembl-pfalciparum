@@ -194,7 +194,11 @@
       margin: { t:0, b:0, l:30, r:100 },
       legend: { x:1.02, y:0.5 },
       template: 'plotly_white',
-      paper_bgcolor: 'rgba(0,0,0,0)'
+      paper_bgcolor: 'rgba(0,0,0,0)',
+      width: '80%',
+      // height: '80%'//,
+    // maxWidth: '80%',
+    // maxHeight: '80%'
     }, {
       responsive: true,
       displayModeBar: false
@@ -210,15 +214,19 @@
       textposition:'none',
       sort:false
     }], {
-     showlegend:true, 
-     legend:{x:1.02,y:0.5},
-     margin:{t:0,b:0,l:0,r:100},
-     template: 'plotly_white',
-     paper_bgcolor: 'rgba(0,0,0,0)'
-    }, {
-      responsive: true,
-      displayModeBar: false
-    });
+      showlegend:true, 
+      legend:{x:1.02,y:0.5},
+      margin:{t:0,b:0,l:0,r:100},
+      template: 'plotly_white',
+      paper_bgcolor: 'rgba(0,0,0,0)',
+      width: '80%',
+      // height: '80%'//,
+    // maxWidth: '80%',
+    // maxHeight: '80%'
+      }, {
+     responsive: true,
+     displayModeBar: false
+      });
 
     // 3D settings
     const COLORS = { High:'#65323e', Moderate:'#d33c61', Low:'#fe7f9c' };

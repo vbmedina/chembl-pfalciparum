@@ -93,7 +93,7 @@ print(f"UMAP 3D embedding exported to {json_path}")
 
 # 8. Optional: Plot only first 2D components for static figure
 plt.figure(figsize=(10, 6))
-colors = {"High": "#65323e", "Moderate": "#d33c61", "Low": "#fe7f9c"}
+colors = {"High": "#cd5052", "Moderate": "#eeded8", "Low": "#6277d5"}
 for category, color in colors.items():
     mask = df["Potency_Bucket"] == category
     plt.scatter(embedding[mask, 0], embedding[mask, 1],

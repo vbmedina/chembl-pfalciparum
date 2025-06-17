@@ -11,7 +11,7 @@ import json
 SEED = 42
 
 # 1. Load dataset
-DATA_PATH = "/Users/victoriamedina/Thesis_Project/ chembl_final_scaffolds_only.csv"
+DATA_PATH = "/Users/victoriamedina/Thesis_Project/chembl_final_scaffolds_only.csv"
 df = pd.read_csv(DATA_PATH)
 print(f"Loaded {len(df):,} rows from {DATA_PATH}")
 

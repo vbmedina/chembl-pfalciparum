@@ -243,13 +243,12 @@
       const prepLabels = [
         'IC₅₀ Hits',
         'Deleted: Missing Strains',
-        'Deleted: Missing IC₅₀',
-        'Deleted: Standard Relation',
+        'Deleted: Non-Standard IC₅₀',
         'Deleted: Sexual Stage',
         'Deleted: Invalid SMILES',
         'Deleted: Invalid Scaffold',
       ];
-      const prepValues = [57490, 5034, 6271, 4178, 1608, 75, 417];
+      const prepValues = [57490, 5110, 10717, 1309, 75, 418];
       const prepColors = ['#03355c','#1077c9','#4eb1ff','#94d0ff','#c0e3ff','#aec7e8','#c5b0d5'];
 
       Plotly.newPlot(
@@ -277,11 +276,7 @@
       );
 
       // 3D settings
-      const COLORS = {
-        High: '#65323e',
-        Moderate: '#d33c61',
-        Low: '#fe7f9c',
-      };
+      const COLORS = {"High": "#cd5052", "Moderate": "#eeded8", "Low": "#6277d5"};
       const LAYOUT3D = {
         margin: { t: 20, b: 20, l: 0, r: 0 },
         scene: { xaxis: {}, yaxis: {}, zaxis: {} },

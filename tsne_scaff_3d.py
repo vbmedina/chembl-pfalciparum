@@ -11,7 +11,7 @@ import json
 SEED = 42
 
 # 1. Load dataset
-DATA_PATH = "/Users/victoriamedina/Thesis_Project/Thesis/Visualizations/chembl_scaf.csv"
+DATA_PATH = "/Users/victoriamedina/Thesis_Project/ chembl_final_scaffolds_only.csv"
 df = pd.read_csv(DATA_PATH)
 print(f"Loaded {len(df):,} rows from {DATA_PATH}")
 
@@ -20,7 +20,7 @@ df = df.dropna(subset=["Smiles", "pChEMBL Value"]).reset_index(drop=True)
 print(f"{len(df):,} rows with valid SMILES and pChEMBL")
 
 # 3. Sample subset for viz
-df = df.sample(n=39907)
+df = df.sample(n=39861)
 
 # 4. Convert SMILES to Morgan fingerprints
 def smiles_to_fp(Smiles, radius=2, n_bits=2048):
